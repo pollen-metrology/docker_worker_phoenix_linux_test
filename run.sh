@@ -89,7 +89,7 @@ gitlab-runner register \
   --url "https://gitlab.com/" \
   --registration-token "nYAsaK9DqxZevC5Sn5Qn" \
   --description "Kubernetes-Runner" \
-  --tag-list "phoenix,pyphoenix" \
+  --tag-list "phoenix-test,pyphoenix-test" \
   --run-untagged="true" \
   --locked="false" \
   &&

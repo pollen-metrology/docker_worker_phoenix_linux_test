@@ -1,4 +1,5 @@
 # docker build -t pollenm/docker_worker_phoenix_linux .
+# docker run -it pollenm/docker_worker_phoenix_linux
 ##FROM ubuntu:19.10
 ##LABEL MAINTENER Pollen Metrology <admin-team@pollen-metrology.com>
 
@@ -98,6 +99,7 @@ ENV PHOENIX_TARGET_TRIPLET=x64-linux
 
 ARG VCPKG_COMMIT=411b4cc
 
+# ERROR !!!
 RUN git clone --quiet --recurse-submodules --branch master https://github.com/Microsoft/vcpkg.git /opt/vcpkg &&\
     cd /opt/vcpkg && git checkout --quiet ${VCPKG_COMMIT} &&\
     /opt/vcpkg/bootstrap-vcpkg.sh -disableMetrics -useSystemBinaries
@@ -168,6 +170,6 @@ RUN apt-get update &&\
 COPY run.sh /
 RUN chmod 755 /run.sh
 
- ENTRYPOINT ["/./run.sh", "-D", "FOREGROUND"]
+ENTRYPOINT ["/./run.sh", "-D", "FOREGROUND"]
 #ENTRYPOINT ["tail", "-f", "/dev/null"]
 #----------------------------------------------------------------------------------------------------------------------#
