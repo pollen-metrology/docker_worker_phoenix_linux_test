@@ -1,5 +1,7 @@
-# docker build -t pollenm/docker_worker_phoenix_linux .
-# docker run -it pollenm/docker_worker_phoenix_linux
+# docker build -t pollenm/docker_worker_phoenix_linux_test .
+# docker run -it pollenm/docker_worker_phoenix_linux_test
+# push to docker-hub : docker push pollenm/docker_worker_phoenix_linux_test
+# push to github : git add Dockerfile && git commit -m "update" && git push
 ##FROM ubuntu:19.10
 ##LABEL MAINTENER Pollen Metrology <admin-team@pollen-metrology.com>
 
@@ -134,7 +136,7 @@ RUN cd /tmp &&\
     wget https://www.python.org/ftp/python/3.6.10/Python-3.6.10.tar.xz &&\
     tar xvf Python-3.6.10.tar.xz &&\
     cd Python-3.6.10 &&\
-    ./configure &&\
+    ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.6 --version
 
@@ -143,7 +145,7 @@ RUN cd /tmp &&\
     wget https://www.python.org/ftp/python/3.7.7/Python-3.7.7.tar.xz &&\
     tar xvf Python-3.7.7.tar.xz &&\
     cd Python-3.7.7 &&\
-    ./configure &&\
+    ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.7 --version
 
@@ -152,7 +154,7 @@ RUN cd /tmp &&\
     wget https://www.python.org/ftp/python/3.8.2/Python-3.8.2.tar.xz &&\
     tar xvf Python-3.8.2.tar.xz &&\
     cd Python-3.8.2 &&\
-    ./configure &&\
+    ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.8 --version
 
