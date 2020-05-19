@@ -15,7 +15,7 @@ start() {
     --url "https://gitlab.com/" \
     --registration-token "nYAsaK9DqxZevC5Sn5Qn" \
     --description "Kubernetes-Runner" \
-    --tag-list "phoenix-test-cache,pyphoenix-test-cache" \
+    --tag-list "phoenix-test,pyphoenix-test" \
     --cache-type "s3" \
     --cache-cache-shared=true \
     --cache-s3-server-address "cache.pollen-metrology.com" \
