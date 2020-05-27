@@ -26,7 +26,7 @@
 # permission is obtained from Pollen Metrology.
 #----------------------------------------------------------------------------------------------------------------------#
 # Build:
-#    - docker build -t pollenm/docker_worker_phoenix_linux . && docker-compose up -d && docker exec -it docker_worker_phoenix_linux /bin/bash
+#    - docker build -t pollenm/docker_worker_phoenix_linux_test . && docker-compose up -d && docker exec -it docker_worker_phoenix_linux /bin/bash
 # Compilation:
 #    - [Phoenix / PyPhoenix] LLVM/Clang (>= 9.0.0)
 #    - [Phoenix / PyPhoenix] GNU Compiler (>= 9.0.0)
@@ -157,6 +157,9 @@ RUN cd /tmp &&\
     ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.8 --version
+
+# Install Conan
+RUN python3 -m pip install conan
 
 # Do nothing - already installed
 #RUN /opt/vcpkg/vcpkg install --triplet ${PYTHON_PHOENIX_TARGET_TRIPLET} --clean-after-build \
