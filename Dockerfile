@@ -1,5 +1,5 @@
 # docker build -t pollenm/docker_worker_phoenix_linux_test .
-# docker run -it -e KUBERNETES_RUNNER_REGISTER_TOKEN='nYAsaK9DqxZevC5Sn5Qn' -e KUBERNETES_RUNNER_CACHE_SERVER_ADDRESS='cache.pollen-metrology.com' -e KUBERNETES_RUNNER_CACHE_ACCESS_KEY='administrateur' -e KUBERNETES_RUNNER_CACHE_SECRET_KEY='v7rB2i6t88h' --name worker_linux_test pollenm/docker_worker_phoenix_linux_test
+# docker run -it -e KUBERNETES_RUNNER_REGISTER_TOKEN='' -e KUBERNETES_RUNNER_CACHE_SERVER_ADDRESS='cache.pollen-metrology.com' -e KUBERNETES_RUNNER_CACHE_ACCESS_KEY='administrateur' -e KUBERNETES_RUNNER_CACHE_SECRET_KEY='' --name worker_linux_test pollenm/docker_worker_phoenix_linux_test
 # push to docker-hub : docker push pollenm/docker_worker_phoenix_linux_test
 # push to github : git add Dockerfile && git commit -m "update" && git push
 ##FROM ubuntu:19.10
