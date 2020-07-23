@@ -1,0 +1,8 @@
+version: '3.3'
+
+services:
+    runner:
+        image: pollenm/docker_worker_phoenix_linux_test
+        container_name: docker_worker_phoenix_linux_test
+        tty: true
+        entrypoint: ["bash", "-c" , "gitlab-runner register --non-interactive --executor \"shell\" --docker-image alpine:latest --url \"https://gitlab.com/\" --registration-token CLEF_GITLAB --description \"PC_LOCAL\" --tag-list \"PC_LOCAL\" --run-untagged=\"true\" --locked=\"false\" && gitlab-runner run"]
