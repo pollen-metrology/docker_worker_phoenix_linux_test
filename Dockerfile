@@ -79,7 +79,7 @@ ENV CXX=g++-9
 # -> powershell: common scripting for both Windows and Linux images
 RUN apt-get update &&\
     apt-get upgrade --assume-yes &&\
-    apt-get install --assume-yes gcc-9-multilib g++-9-multilib libstdc++-9-dev \
+    apt-get install --assume-yes gcc-9-multilib g++-9-multilib libstdc++-9-dev libgl1-mesa-dev \
                                  clang-9 clang-format-9 clang-tidy-9 clang-tools-9 libc++-9-dev libc++abi-9-dev \
                                  valgrind cppcheck doxygen graphviz libssl-dev \
                                  curl unzip tar git make ninja-build nano \
@@ -169,7 +169,11 @@ RUN python3 -m pip install conan
 # GITLAB RUNNER"
 FROM pyphoenix_development_environment_0320 AS gitlab-runner_development_environment_0320
 
-RUN apt-get update &&\
+#RUN apt-get update &&\
+#    apt-get install gitlab-runner -y
+
+RUN curl -L https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | bash &&\
+    apt-get update &&\
     apt-get install gitlab-runner -y
 
 COPY run.sh /
