@@ -1,5 +1,5 @@
 # docker build -t pollenm/docker_worker_phoenix_linux_test .
-# docker run -it -e KUBERNETES_RUNNER_REGISTER_TOKEN='' -e KUBERNETES_RUNNER_CACHE_SERVER_ADDRESS='cache.pollen-metrology.com' -e KUBERNETES_RUNNER_CACHE_ACCESS_KEY='administrateur' -e KUBERNETES_RUNNER_CACHE_SECRET_KEY='' --name worker_linux_test pollenm/docker_worker_phoenix_linux_test
+# docker run -it pollenm/docker_worker_phoenix_linux_test
 # push to docker-hub : docker push pollenm/docker_worker_phoenix_linux_test
 # push to github : git add Dockerfile && git commit -m "update" && git push
 ##FROM ubuntu:19.10
@@ -26,7 +26,7 @@
 # permission is obtained from Pollen Metrology.
 #----------------------------------------------------------------------------------------------------------------------#
 # Build:
-#    - docker build -t pollenm/docker_worker_phoenix_linux_test . && docker-compose up -d && docker exec -it docker_worker_phoenix_linux /bin/bash
+#    - docker build -t pollenm/docker_worker_phoenix_linux . && docker-compose up -d && docker exec -it docker_worker_phoenix_linux /bin/bash
 # Compilation:
 #    - [Phoenix / PyPhoenix] LLVM/Clang (>= 9.0.0)
 #    - [Phoenix / PyPhoenix] GNU Compiler (>= 9.0.0)
@@ -60,10 +60,13 @@
 #    - [PyPhoenix] To be discussed (Q/A - using Jupyter notebooks for PyPhoenix)
 #----------------------------------------------------------------------------------------------------------------------#
 
-FROM ubuntu:19.10 AS pollen_cxx_development_environment_0320
+#FROM ubuntu:19.10 AS pollen_cxx_development_environment_0320
+FROM ubuntu:20.04 AS pollen_cxx_development_environment_0320
 
 LABEL vendor="Pollen Metrology"
 LABEL maintainer="herve.ozdoba@pollen-metrology.com"
+
+ARG DEBIAN_FRONTEND=noninteractive
 
 # Commit 411b4cc is the last working version for compiling VXL (then contributors brokes the port file)
 ARG CMAKE_VERSION=v3.16.4
@@ -110,7 +113,7 @@ ENV PATH="/opt/vcpkg/vcpkg:${PATH}"
 RUN /opt/vcpkg/vcpkg update
 RUN /opt/vcpkg/vcpkg install --triplet ${PHOENIX_TARGET_TRIPLET} --clean-after-build \
          boost-stacktrace boost-iostreams boost-core boost-math boost-random boost-format boost-crc \
-         opencv3[core,contrib,tiff,png,jpeg] vxl eigen3 gtest boost-geometry nlopt
+         opencv3[core,contrib,tiff,png,jpeg] vxl eigen3 gtest boost-geometry nlopt protobuf
 #----------------------------------------------------------------------------------------------------------------------#
 
 #----------------------------------------------------------------------------------------------------------------------#
@@ -139,6 +142,7 @@ RUN cd /tmp &&\
     ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.6 --version
+#RUN python3.6 -m pip install --upgrade pip    
 
 # Install Python 3.7.7
 RUN cd /tmp &&\
@@ -148,6 +152,7 @@ RUN cd /tmp &&\
     ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.7 --version
+#RUN python3.7 -m pip install --upgrade pip     
 
 # Install Python 3.8.2
 RUN cd /tmp &&\
@@ -157,14 +162,34 @@ RUN cd /tmp &&\
     ./configure --enable-shared  --prefix=/usr &&\
     make install &&\
     python3.8 --version
+#RUN python3.8 -m pip install --upgrade pip     
 
 # Install Conan
-RUN python3 -m pip install conan
+RUN python3 -m pip install conan    
 
 # Do nothing - already installed
 #RUN /opt/vcpkg/vcpkg install --triplet ${PYTHON_PHOENIX_TARGET_TRIPLET} --clean-after-build \
 #        opencv3[core,contrib,tiff,png,jpeg]
 #----------------------------------------------------------------------------------------------------------------------#
+
+# Install intel mkl (must have pip)
+RUN apt-get update
+RUN apt-get -y install python2 && cd /tmp && curl https://bootstrap.pypa.io/2.7/get-pip.py --output get-pip.py && python2 get-pip.py
+#RUN apt-get install -y python3-pip
+# mkl
+RUN pip install mkl_include==2021.1.1
+RUN pip install tbb==2021.1.1
+# pytorch
+RUN cd /tmp &&\
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-shared-with-deps-1.7.1%2Bcpu.zip &&\
+    mkdir -p /lib/libtorch/libtorch &&\
+    unzip libtorch-shared-with-deps-1.7.1+cpu.zip -d /lib/libtorch/libtorch
+
+
+RUN cd /tmp &&\
+    wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.7.1%2Bcpu.zip &&\
+    mkdir -p /lib/libtorch/libtorch_cxx11 &&\
+    unzip libtorch-cxx11-abi-shared-with-deps-1.7.1+cpu.zip -d /lib/libtorch/libtorch_cxx11
 
 # GITLAB RUNNER"
 FROM pyphoenix_development_environment_0320 AS gitlab-runner_development_environment_0320
@@ -180,5 +205,5 @@ COPY run.sh /
 RUN chmod 755 /run.sh
 
 ENTRYPOINT ["/./run.sh", "-D", "FOREGROUND"]
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
+###ENTRYPOINT ["tail", "-f", "/dev/null"]
 #----------------------------------------------------------------------------------------------------------------------#

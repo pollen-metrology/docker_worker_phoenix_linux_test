@@ -15,7 +15,7 @@ start() {
     --url "https://gitlab.com/" \
     --registration-token $KUBERNETES_RUNNER_REGISTER_TOKEN \
     --description "Kubernetes-Runner" \
-    --tag-list "phoenix-linux-test,pyphoenix-linux-test" \
+    --tag-list $KUBERNETES_RUNNER_TAG \
     --cache-type "s3" \
     --cache-shared=true \
     --cache-s3-server-address $KUBERNETES_RUNNER_CACHE_SERVER_ADDRESS \
