@@ -70,7 +70,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Commit 411b4cc is the last working version for compiling VXL (then contributors brokes the port file)
 #ARG CMAKE_VERSION=v3.16.4
-ARG CMAKE_VERSION=v3.20.5
+ARG CMAKE_VERSION=v3.18.5
+#ARG CMAKE_VERSION=v3.20.5
 
 ENV CC=gcc-9
 ENV CXX=g++-9
@@ -192,6 +193,13 @@ RUN cd /tmp &&\
     wget https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-1.7.1%2Bcpu.zip &&\
     mkdir -p /lib/libtorch/libtorch_cxx11 &&\
     unzip libtorch-cxx11-abi-shared-with-deps-1.7.1+cpu.zip -d /lib/libtorch/libtorch_cxx11
+
+# git lfs
+RUN apt-get install -y git-lfs 
+
+# Gtest-parallel
+#COPY tools/gtest-parallel.zip /tmp/gtest-parallel.zip    
+#RUN unzip /tmp/gtest-parallel.zip -d /lib/gtest-parallel
 
 # GITLAB RUNNER"
 FROM pyphoenix_development_environment_0320 AS gitlab-runner_development_environment_0320
